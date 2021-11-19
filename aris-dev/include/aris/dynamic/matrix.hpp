@@ -101,7 +101,16 @@ namespace aris::dynamic{
 		double *iter_;
 		Type type_;
 	};
-
+/**
+ * @brief 通过std::cout打印矩阵
+ * 
+ * @tparam T 
+ * @tparam TType 
+ * @param m 矩阵高
+ * @param n 矩阵宽
+ * @param data 输入
+ * @param d_t 表明行、列主元
+ */
 	template <typename T, typename TType>
 	auto inline dsp(Size m, Size n, const T *data, TType d_t)noexcept->void
 	{
@@ -118,6 +127,14 @@ namespace aris::dynamic{
 		}
 		std::cout << std::endl;
 	};
+	/**
+	 * @brief 通过std::cout打印矩阵
+	 * 
+	 * @tparam T 
+	 * @param m 数据高
+	 * @param n 数据宽
+	 * @param data 输入
+	 */
 	template <typename T>
 	auto inline dsp(Size m, Size n, const T *data)noexcept->void { dsp(m, n, data, n); }
 	template<typename AType>
@@ -162,7 +179,14 @@ namespace aris::dynamic{
 		return true;
 	}
 	auto inline s_is_equal(Size m, Size n, const double *m1, const double *m2, double error) noexcept->bool { return s_is_equal(m, n, m1, n, m2, n, error); };
-
+	/**
+	 * @brief 生成指定大小的单位方阵
+	 * 
+	 * @tparam AType 
+	 * @param m 单位阵高
+	 * @param A 输出
+	 * @param a_t 注明行、列主元
+	 */
 	template <typename AType>
 	auto inline s_eye(Size m, double *A, AType a_t) noexcept->void{
 		for (Size i(-1), ai0{ 0 }, aii{ 0 }; ++i < m; ai0 = next_r(ai0, a_t), aii = next_d(aii, a_t)){
@@ -172,6 +196,14 @@ namespace aris::dynamic{
 		}
 	}
 	auto inline s_eye(Size m, double *A) noexcept->void { return s_eye(m, A, m); }
+	/**
+	 * @brief 生成绕x轴转动angle角的变换矩阵（弧度制）
+	 * 
+	 * @tparam AType 
+	 * @param angle 角度
+	 * @param A 输出
+	 * @param a_t 注明行、列主元
+	 */
 	template <typename AType>
 	auto inline s_rmx(double angle, double *A, AType a_t) noexcept->void{
 		A[at(0, 0, a_t)] = 1.0;
@@ -185,6 +217,14 @@ namespace aris::dynamic{
 		A[at(2, 2, a_t)] = std::cos(angle);
 	}
 	auto inline s_rmx(double angle, double *A) noexcept->void { return s_rmx(angle, A, 3); }
+	/**
+	 * @brief 生成绕y轴转动angle的变换矩阵（弧度制）
+	 * 
+	 * @tparam AType 
+	 * @param angle 
+	 * @param A 
+	 * @param a_t 
+	 */
 	template <typename AType>
 	auto inline s_rmy(double angle, double *A, AType a_t) noexcept->void{
 		A[at(0, 0, a_t)] = std::cos(angle);
@@ -198,6 +238,14 @@ namespace aris::dynamic{
 		A[at(2, 2, a_t)] = std::cos(angle);
 	}
 	auto inline s_rmy(double angle, double *A) noexcept->void { return s_rmy(angle, A, 3); }
+	/**
+	 * @brief 生成绕z转动angle角度的变换矩阵（弧度制）
+	 * 
+	 * @tparam AType 
+	 * @param angle 角度
+	 * @param A 输出
+	 * @param a_t 注明行、列主元
+	 */
 	template <typename AType>
 	auto inline s_rmz(double angle, double *A, AType a_t) noexcept->void{
 		A[at(0, 0, a_t)] = std::cos(angle);
@@ -211,7 +259,15 @@ namespace aris::dynamic{
 		A[at(2, 2, a_t)] = 1.0;
 	}
 	auto inline s_rmz(double angle, double *A) noexcept->void { return s_rmz(angle, A, 3); }
-
+/**
+ * @brief 求向量模长
+ * 
+ * @tparam XType 
+ * @param n 向量长度
+ * @param x 输入向量
+ * @param x_t 注明行、列主元
+ * @return double 返回向量模长
+ */
 	template<typename XType>
 	auto inline s_norm(Size n, const double *x, XType x_t) noexcept->double
 	{
@@ -220,6 +276,17 @@ namespace aris::dynamic{
 		return std::sqrt(norm);
 	}
 	auto inline s_norm(Size n, const double *x) noexcept->double { return s_norm(n, x, 1); }
+/**
+ * @brief 交换两个向量的值
+ * 
+ * @tparam XType 
+ * @tparam YType 
+ * @param n 向量长度
+ * @param x 输入向量1
+ * @param x_t 注明行、列主元
+ * @param y 输入向量2
+ * @param y_t 注明行、列主元
+ */
 	template<typename XType, typename YType>
 	auto inline s_swap_v(Size n, double *x, XType x_t, double *y, YType y_t) noexcept->void
 	{
@@ -227,6 +294,18 @@ namespace aris::dynamic{
 			std::swap(x[x_id], y[y_id]);
 	}
 	auto inline s_swap_v(Size n, double *x, double *y) noexcept->void { s_swap_v(n, x, 1, y, 1); }
+	/**
+	 * @brief 交换两个矩阵的值
+	 * 
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param a 输入矩阵1
+	 * @param a_t 注明行、列主元
+	 * @param b 输入矩阵2
+	 * @param b_t 注明行、列主元
+	 */
 	template<typename AType, typename BType>
 	auto inline s_swap_m(Size m, Size n, double *a, AType a_t, double *b, BType b_t) noexcept->void
 	{
@@ -239,6 +318,16 @@ namespace aris::dynamic{
 		}
 	}
 	auto inline s_swap_m(Size m, Size n, double *a, double *b) noexcept->void { s_swap_m(m, n, a, n, b, n); }
+	/**
+	 * @brief 将矩阵填充value值
+	 * 
+	 * @tparam AType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param value 填充值
+	 * @param A 被填充的矩阵
+	 * @param a_t 注明行、列主元
+	 */
 	template<typename AType>
 	auto inline s_fill(Size m, Size n, double value, double *A, AType a_t) noexcept->void
 	{
@@ -248,32 +337,108 @@ namespace aris::dynamic{
 	}// fill matrix with value
 	auto inline s_fill(Size m, Size n, double value, double *A) noexcept->void { std::fill(A, A + m * n, value); }
 	template<typename XType>
+	/**
+	 * @brief 将向量各元素取负数
+	 * 
+	 * @param n 向量长
+	 * @param x 输入向量
+	 * @param x_t 注明行、列主元
+	 */
 	auto inline s_iv(Size n, double *x, XType x_t) noexcept->void { for (Size i(-1), vid{ 0 }; ++i < n; vid = next_r(vid, x_t))x[vid] = -x[vid]; }
 	auto inline s_iv(Size n, double *x) noexcept->void { for (Size i(-1); ++i < n;)x[i] = -x[i]; }
+	/**
+	 * @brief 将向量各元素乘以alpha
+	 * 
+	 * @tparam XType 
+	 * @param n 向量长
+	 * @param alpha 系数
+	 * @param x 被操作向量
+	 * @param x_t 注明行、列主元
+	 */
 	template<typename XType>
 	auto inline s_nv(Size n, double alpha, double *x, XType x_t) noexcept->void { for (Size i(-1), vid{ 0 }; ++i < n; vid = next_r(vid, x_t))x[vid] *= alpha; }
 	auto inline s_nv(Size n, double alpha, double *x) noexcept->void { for (Size i(-1); ++i < n;)x[i] *= alpha; }
+	/**
+	 * @brief 将向量x拷贝到y
+	 * 
+	 * @tparam XType 
+	 * @tparam YType 
+	 * @param n 向量长度
+	 * @param x 输入x
+	 * @param x_t 注明行、列主元
+	 * @param y 输出y
+	 * @param y_t 注明行、列主元
+	 */
 	template<typename XType, typename YType>
 	auto inline s_vc(Size n, const double *x, XType x_t, double *y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] = x[x_id]; }
+	/**
+	 * @brief y= alpha * x
+	 * 
+	 * @tparam XType 
+	 * @tparam YType 
+	 * @param n 向量长度
+	 * @param alpha 系数
+	 * @param x 输入x
+	 * @param x_t 注明行、列主元
+	 * @param y 输出
+	 * @param y_t 注明行、列主元
+	 */
 	template<typename XType, typename YType>
 	auto inline s_vc(Size n, double alpha, const double *x, XType x_t, double *y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] = alpha * x[x_id]; }
 	auto inline s_vc(Size n, const double *x, double *y) noexcept->void { std::copy_n(x, n, y); }
 	auto inline s_vc(Size n, double alpha, const double *x, double *y) noexcept->void { for (Size i(-1); ++i < n;)y[i] = alpha * x[i]; }
+	/**
+	 * @brief y = - x
+	 * 
+	 * @tparam XType 
+	 * @tparam YType 
+	 * @param n 向量长度n
+	 * @param x 输入
+	 * @param x_t 注明行、列主元
+	 * @param y 输出
+	 * @param y_t 注明行、列主元
+	 */
 	template<typename XType, typename YType>
 	auto inline s_vi(Size n, const double *x, XType x_t, double *y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] = -x[x_id]; }
 	auto inline s_vi(Size n, const double *x, double *y) noexcept->void { for (Size i(-1); ++i < n;)y[i] = -x[i]; }
+	/**
+	 * @brief y = y + x
+	 * 
+	 * @tparam XType 
+	 * @tparam YType 
+	 * @param n 向量长度
+	 * @param x 输入x
+	 * @param x_t 注明行、列主元
+	 * @param y 输入y
+	 * @param y_t 注明行、列主元
+	 */
 	template<typename XType, typename YType>
 	auto inline s_va(Size n, const double* x, XType x_t, double* y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] += x[x_id]; }
+	/**
+	 * @brief  y = y + alpha * x
+	 * 
+	 * @tparam XType 
+	 * @tparam YType 
+	 * @param n 向量长度
+	 * @param alpha 系数
+	 * @param x 向量x
+	 * @param x_t 注明行、列主元
+	 * @param y 向量y
+	 * @param y_t 注明行、列主元
+	 */
 	template<typename XType, typename YType>
 	auto inline s_va(Size n, double alpha, const double* x, XType x_t, double* y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] += alpha * x[x_id]; }
 	auto inline s_va(Size n, const double* x, double* y) noexcept->void { for (Size i = 0; i < n; ++i)y[i] += x[i]; }
 	auto inline s_va(Size n, double alpha, const double* x, double* y) noexcept->void { for (Size i = 0; i < n; ++i)y[i] += alpha * x[i]; }
+	
 	template<typename XType, typename YType>
 	auto inline s_vs(Size n, const double* x, XType x_t, double* y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] -= x[x_id]; }
 	auto inline s_vs(Size n, const double* x, double* y) noexcept->void { for (Size i = 0; i < n; ++i)y[i] -= x[i]; }
+	
 	template<typename XType, typename YType>
 	auto inline s_vv(Size n, const double *x, XType x_t, const double *y, YType y_t) noexcept->double { double ret{ 0 }; for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))ret += x[x_id] * y[y_id]; return ret; }
 	auto inline s_vv(Size n, const double *x, const double *y) noexcept->double { double ret{ 0 }; for (Size i = 0; i < n; ++i)ret += x[i] * y[i];	return ret; }
+	
 	template<typename AType>
 	auto inline s_nm(Size m, Size n, double alpha, double* A, AType a_t) noexcept->void
 	{
@@ -282,6 +447,7 @@ namespace aris::dynamic{
 				A[aij] *= alpha;
 	}
 	auto inline s_nm(Size m, Size n, double alpha, double* A) noexcept->void { s_nv(m*n, alpha, A); }
+	
 	template<typename AType>
 	auto inline s_im(Size m, Size n, double* A, AType a_t) noexcept->void
 	{

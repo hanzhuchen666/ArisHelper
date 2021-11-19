@@ -129,6 +129,11 @@ namespace aris::dynamic
 		auto virtual getV(double *v)const noexcept->void { s_vc(dim(), this->v(), v); }
 		auto virtual a()const noexcept->const double* { return nullptr; }
 		auto virtual updA() noexcept->void {}
+		/**
+		 * @brief 
+		 * 
+		 * @param a 
+		 */
 		auto virtual setA(const double *a) noexcept->void {}
 		auto virtual getA(double *a)const noexcept->void { s_vc(dim(), this->a(), a); }
 		auto virtual f()const noexcept->const double* { return nullptr; }
@@ -140,6 +145,10 @@ namespace aris::dynamic
 		: Constraint(name, makI, makJ, active){}
 		ARIS_DEFINE_BIG_FOUR(MotionBase);
 	};
+	/**
+	 * @brief 这是一个类
+	 * 
+	 */
 	class ARIS_API Force :public Interaction{
 	public:
 		auto virtual cptGlbFs(double *fsI, double *fsJ)const noexcept->void = 0;
