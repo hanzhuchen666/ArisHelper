@@ -430,15 +430,45 @@ namespace aris::dynamic{
 	auto inline s_va(Size n, double alpha, const double* x, XType x_t, double* y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] += alpha * x[x_id]; }
 	auto inline s_va(Size n, const double* x, double* y) noexcept->void { for (Size i = 0; i < n; ++i)y[i] += x[i]; }
 	auto inline s_va(Size n, double alpha, const double* x, double* y) noexcept->void { for (Size i = 0; i < n; ++i)y[i] += alpha * x[i]; }
-	
+	/**
+	 * @brief y = y - x
+	 * 
+	 * @tparam XType 
+	 * @tparam YType 
+	 * @param n 向量长度
+	 * @param x 向量x
+	 * @param x_t 注明行、列主元
+	 * @param y 向量y
+	 * @param y_t 注明行、列主元
+	 */
 	template<typename XType, typename YType>
 	auto inline s_vs(Size n, const double* x, XType x_t, double* y, YType y_t) noexcept->void { for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))y[y_id] -= x[x_id]; }
 	auto inline s_vs(Size n, const double* x, double* y) noexcept->void { for (Size i = 0; i < n; ++i)y[i] -= x[i]; }
-	
+	/**
+	 * @brief 向量点乘
+	 * 
+	 * @tparam XType 
+	 * @tparam YType 
+	 * @param n 向量长度
+	 * @param x 向量x
+	 * @param x_t 注明行、列主元
+	 * @param y 向量y
+	 * @param y_t 注明行、列主元
+	 * @return double 点乘结果
+	 */
 	template<typename XType, typename YType>
 	auto inline s_vv(Size n, const double *x, XType x_t, const double *y, YType y_t) noexcept->double { double ret{ 0 }; for (Size i(-1), x_id{ 0 }, y_id{ 0 }; ++i < n; x_id = next_r(x_id, x_t), y_id = next_r(y_id, y_t))ret += x[x_id] * y[y_id]; return ret; }
 	auto inline s_vv(Size n, const double *x, const double *y) noexcept->double { double ret{ 0 }; for (Size i = 0; i < n; ++i)ret += x[i] * y[i];	return ret; }
-	
+	/**
+	 * @brief 矩阵A每个元素乘系数alpha， A = A * alpha
+	 * 
+	 * @tparam AType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param alpha 系数
+	 * @param A 输入矩阵
+	 * @param a_t 注明行、列主元
+	 */
 	template<typename AType>
 	auto inline s_nm(Size m, Size n, double alpha, double* A, AType a_t) noexcept->void
 	{
@@ -447,7 +477,15 @@ namespace aris::dynamic{
 				A[aij] *= alpha;
 	}
 	auto inline s_nm(Size m, Size n, double alpha, double* A) noexcept->void { s_nv(m*n, alpha, A); }
-	
+	/**
+	 * @brief A = - A
+	 * 
+	 * @tparam AType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param A 矩阵
+	 * @param a_t 注明行、列主元
+	 */
 	template<typename AType>
 	auto inline s_im(Size m, Size n, double* A, AType a_t) noexcept->void
 	{
@@ -456,6 +494,18 @@ namespace aris::dynamic{
 				A[aij] = -A[aij];
 	}
 	auto inline s_im(Size m, Size n, double* A) noexcept->void { s_iv(m*n, A); }
+	/**
+	 * @brief B = A
+	 * 
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 */
 	template<typename AType, typename BType>
 	auto inline s_mc(Size m, Size n, const double *A, AType a_t, double *B, BType b_t) noexcept->void
 	{
@@ -463,6 +513,19 @@ namespace aris::dynamic{
 			for (Size j(-1), aij{ ai0 }, bij{ bi0 }; ++j < n; aij = next_c(aij, a_t), bij = next_c(bij, b_t))
 				B[bij] = A[aij];
 	}
+	/**
+	 * @brief B = alpha * A
+	 * 
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param alpha 系数
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 */
 	template<typename AType, typename BType>
 	auto inline s_mc(Size m, Size n, double alpha, const double *A, AType a_t, double *B, BType b_t) noexcept->void
 	{
@@ -472,6 +535,18 @@ namespace aris::dynamic{
 	}
 	auto inline s_mc(Size m, Size n, const double *A, double *B) noexcept->void { s_vc(m*n, A, B); }
 	auto inline s_mc(Size m, Size n, double alpha, const double *A, double *B) noexcept->void { s_vc(m*n, alpha, A, B); }
+	/**
+	 * @brief B = B + A
+	 * 
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 */
 	template<typename AType, typename BType>
 	auto inline s_ma(Size m, Size n, const double* A, AType a_t, double* B, BType b_t) noexcept->void
 	{
@@ -479,6 +554,19 @@ namespace aris::dynamic{
 			for (Size j(-1), aij{ ai0 }, bij{ bi0 }; ++j < n; aij = next_c(aij, a_t), bij = next_c(bij, b_t))
 				B[bij] += A[aij];
 	}
+	/**
+	 * @brief B = B + alpha * A
+	 * 
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param alpha 系数
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 */
 	template<typename AType, typename BType>
 	auto inline s_ma(Size m, Size n, double alpha, const double* A, AType a_t, double* B, BType b_t) noexcept->void
 	{
@@ -488,6 +576,18 @@ namespace aris::dynamic{
 	}
 	auto inline s_ma(Size m, Size n, const double* A, double* B) noexcept->void { s_va(m*n, A, B); }
 	auto inline s_ma(Size m, Size n, double alpha, const double* A, double* B) noexcept->void { s_va(m*n, alpha, A, B); }
+	/**
+	 * @brief B = - A
+	 * 
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 */
 	template<typename AType, typename BType>
 	auto inline s_mi(Size m, Size n, const double* A, AType a_t, double* B, BType b_t) noexcept->void
 	{
@@ -496,6 +596,18 @@ namespace aris::dynamic{
 				B[bij] = -A[aij];
 	}
 	auto inline s_mi(Size m, Size n, const double* A, double* B) noexcept->void { s_vi(m*n, A, B); }
+	/**
+	 * @brief B = B - A
+	 * 
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @param m 矩阵高
+	 * @param n 矩阵宽
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 */
 	template<typename AType, typename BType>
 	auto inline s_ms(Size m, Size n, const double* A, AType a_t, double* B, BType b_t) noexcept->void
 	{
@@ -504,6 +616,23 @@ namespace aris::dynamic{
 				B[bij] -= A[aij];
 	}
 	auto inline s_ms(Size m, Size n, const double* A, double* B) noexcept->void { s_vs(m*n, A, B); }
+	/**
+	 * @brief C = C + A * B
+	 * 
+	 * @note C(m,n) A(m,k) B(k,n)
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @tparam CType 
+	 * @param m C矩阵高，A矩阵高
+	 * @param n C矩阵宽，B矩阵宽
+	 * @param k A矩阵宽，B矩阵高
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 * @param C 矩阵C
+	 * @param c_t 注明行、列主元
+	 */
 	template<typename AType, typename BType, typename CType>
 	auto inline s_mma(Size m, Size n, Size k, const double* A, AType a_t, const double* B, BType b_t, double *C, CType c_t)noexcept->void
 	{
@@ -516,6 +645,24 @@ namespace aris::dynamic{
 			}
 		}
 	}
+		/**
+	 * @brief C = C + alpha * A * B
+	 * 
+	 * @note C(m,n) A(m,k) B(k,n)
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @tparam CType 
+	 * @param m C矩阵高，A矩阵高
+	 * @param n C矩阵宽，B矩阵宽
+	 * @param k A矩阵宽，B矩阵高
+	 * @param alpha 系数alpha
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 * @param C 矩阵C
+	 * @param c_t 注明行、列主元
+	 */
 	template<typename AType, typename BType, typename CType>
 	auto inline s_mma(Size m, Size n, Size k, double alpha, const double* A, AType a_t, const double* B, BType b_t, double *C, CType c_t)noexcept->void
 	{
@@ -532,6 +679,23 @@ namespace aris::dynamic{
 	}
 	auto inline s_mma(Size m, Size n, Size k, const double* A, const double* B, double *C) noexcept->void { s_mma(m, n, k, A, k, B, n, C, n); }
 	auto inline s_mma(Size m, Size n, Size k, double alpha, const double* A, const double* B, double *C) noexcept->void { s_mma(m, n, k, alpha, A, k, B, n, C, n); }
+	/**
+	 * @brief C = C - A * B
+	 * 
+	 * @note C(m,n) A(m,k) B(k,n)
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @tparam CType 
+	 * @param m C矩阵高，A矩阵高
+	 * @param n C矩阵宽，B矩阵宽
+	 * @param k A矩阵宽，B矩阵高
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 * @param C 矩阵C
+	 * @param c_t 注明行、列主元
+	 */
 	template<typename AType, typename BType, typename CType>
 	auto inline s_mms(Size m, Size n, Size k, const double* A, AType a_t, const double* B, BType b_t, double *C, CType c_t)noexcept->void
 	{
@@ -545,6 +709,23 @@ namespace aris::dynamic{
 		}
 	}
 	auto inline s_mms(Size m, Size n, Size k, const double* A, const double* B, double *C) noexcept->void { s_mms(m, n, k, A, k, B, n, C, n); }
+	/**
+	 * @brief C = A * B
+	 * 
+	 * @note C(m,n) A(m,k) B(k,n)
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @tparam CType 
+	 * @param m C矩阵高，A矩阵高
+	 * @param n C矩阵宽，B矩阵宽
+	 * @param k A矩阵宽，B矩阵高
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 * @param C 矩阵C
+	 * @param c_t 注明行、列主元
+	 */
 	template<typename AType, typename BType, typename CType>
 	auto inline s_mm(Size m, Size n, Size k, const double* A, AType a_t, const double* B, BType b_t, double *C, CType c_t) noexcept->void
 	{
@@ -558,6 +739,24 @@ namespace aris::dynamic{
 			}
 		}
 	}
+	/**
+	 * @brief C = alpha * A * B
+	 * 
+	 * @note C(m,n) A(m,k) B(k,n)
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @tparam CType 
+	 * @param m C矩阵高，A矩阵高
+	 * @param n C矩阵宽，B矩阵宽
+	 * @param k A矩阵宽，B矩阵高
+	 * @param alpha 系数alpha
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 * @param C 矩阵C
+	 * @param c_t 注明行、列主元
+	 */
 	template<typename AType, typename BType, typename CType>
 	auto inline s_mm(Size m, Size n, Size k, double alpha, const double* A, AType a_t, const double* B, BType b_t, double *C, CType c_t) noexcept->void
 	{
@@ -574,6 +773,23 @@ namespace aris::dynamic{
 	}
 	auto inline s_mm(Size m, Size n, Size k, const double* A, const double* B, double *C) noexcept->void { s_fill(m, n, 0, C); s_mma(m, n, k, A, B, C); }
 	auto inline s_mm(Size m, Size n, Size k, double alpha, const double* A, const double* B, double *C) noexcept->void { s_mm(m, n, k, A, B, C); s_nm(m, n, alpha, C); }
+	/**
+	 * @brief C = - A * B
+	 * 
+	 * @note C(m,n) A(m,k) B(k,n)
+	 * @tparam AType 
+	 * @tparam BType 
+	 * @tparam CType 
+	 * @param m C矩阵高，A矩阵高
+	 * @param n C矩阵宽，B矩阵宽
+	 * @param k A矩阵宽，B矩阵高
+	 * @param A 矩阵A
+	 * @param a_t 注明行、列主元
+	 * @param B 矩阵B
+	 * @param b_t 注明行、列主元
+	 * @param C 矩阵C
+	 * @param c_t 注明行、列主元
+	 */
 	template<typename AType, typename BType, typename CType>
 	auto inline s_mmi(Size m, Size n, Size k, const double* A, AType a_t, const double* B, BType b_t, double *C, CType c_t) noexcept->void
 	{
